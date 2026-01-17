@@ -21,18 +21,24 @@ var command_registry: Dictionary = {
         "description": "List the children of the current node",
         "function": list_children,
         "parameters": [],
+    },
+    "cn": {
+        "name": "Change node",
+        "description": "Change the current node",
+        "function": change_node,
+        "parameters": ["path"],
     }
 }
 
 func execute_command(command: String) -> void:
     command_execution_requested.emit(command, current_node)
     var parsed_command = _parse_command(command)
-    var cmd_dict: Dictionary = command_registry.get(parsed_command[0], null)
-    if not cmd_dict:
-        # Emit cmd not found error
+    var cmd_dict: Dictionary = command_registry.get(parsed_command[0], {})
+    if cmd_dict.is_empty():
+        command_execution_finished.emit("Command not found", "text")
         return
     var cmd_function: Callable = cmd_dict['function']
-    var cmd_params: Array = cmd_dict['parameters']
+    var cmd_params: Array = parsed_command.slice(1)
     cmd_function.callv(cmd_params)
     
 
@@ -57,5 +63,13 @@ func list_children() -> void:
     for child in current_node.get_children():
         children_names.append(child.name)
     command_execution_finished.emit(children_names, "list")
+
+func change_node(path: String) -> void:
+    var new_node = current_node.get_node(path)
+    print(path)
+    if new_node:
+        current_node = new_node
+    else:
+        command_execution_finished.emit("Node not found", "text")
 
 #endregion
