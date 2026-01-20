@@ -2,6 +2,9 @@ extends HBoxContainer
 
 @onready var line_edit = $LineEdit
 
+var autocomplete_index = 0
+var autocomplete_input = ""
+
 func _ready() -> void:
     TreeShellCore.current_node_changed.connect(_on_current_node_changed)
     TreeShellCore.command_execution_finished.connect(_on_command_execution_finished)
@@ -19,11 +22,23 @@ func _on_command_execution_finished(result: Variant, show_as: String) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
     if event.keycode == KEY_ENTER:
         var command = clean_input_text(line_edit.text)
-        line_edit.clear()
-        line_edit.call_deferred("release_focus")
-        hide()
-        TreeShellCore.execute_command(command)
-    # line_edit.call_deferred("grab_focus")
+        if command:
+            line_edit.clear()
+            line_edit.call_deferred("release_focus")
+            hide()
+            TreeShellCore.execute_command(command)
+    if event.keycode == KEY_TAB and not event.is_pressed():
+        print(autocomplete_index)
+        print(autocomplete_input)
+        if autocomplete_index == 0:
+            autocomplete_input = line_edit.text
+        var autocomplete = TreeShellCore.autocomplete(autocomplete_input, autocomplete_index)
+        line_edit.text = autocomplete
+        line_edit.caret_column = autocomplete.length()
+        autocomplete_index += 1
+    else:
+        autocomplete_index = 0
+
 
 func _update_current_node_path(node: Node) -> void:
     %CurrentNodePath.text = node.get_path()

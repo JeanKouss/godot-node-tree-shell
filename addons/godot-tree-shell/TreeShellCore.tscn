@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://clfaqw0wqwo21"]
+
+[ext_resource type="Script" uid="uid://dsledk48ihwi8" path="res://addons/godot-tree-shell/TreeShellCore.gd" id="1_gmkul"]
+[ext_resource type="PackedScene" uid="uid://c8wvuh7gtv8gk" path="res://addons/godot-tree-shell/components/ui/Terminal.tscn" id="2_ulb1s"]
+
+[node name="TreeShellCore" type="Node"]
+script = ExtResource("1_gmkul")
+
+[node name="Terminal" parent="." instance=ExtResource("2_ulb1s")]

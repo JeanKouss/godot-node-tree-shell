@@ -3,17 +3,17 @@
 [ext_resource type="Script" uid="uid://ey4hltpaj8e6" path="res://addons/godot-tree-shell/components/ui/Terminal.gd" id="1_felq1"]
 [ext_resource type="PackedScene" uid="uid://bp3hy2twvbd27" path="res://addons/godot-tree-shell/components/ui/ShellInput.tscn" id="1_jbsct"]
 
-[node name="Terminal" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Terminal" type="Window"]
+disable_3d = true
+oversampling_override = 1.0
+title = "GodotTreeShellTerminal"
+initial_position = 5
+size = Vector2i(700, 600)
+transient = true
+keep_title_visible = true
 script = ExtResource("1_felq1")
 
 [node name="Panel" type="Panel" parent="."]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -21,14 +21,13 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 follow_focus = true
-vertical_scroll_mode = 0
+horizontal_scroll_mode = 0
 
 [node name="ShellHistory" type="VBoxContainer" parent="ScrollContainer"]
 unique_name_in_owner = true
@@ -37,4 +36,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Shellinput" parent="ScrollContainer/ShellHistory" instance=ExtResource("1_jbsct")]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="ScrollContainer/ShellHistory"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
