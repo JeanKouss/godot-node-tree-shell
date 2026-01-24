@@ -47,6 +47,12 @@ var command_registry: Dictionary = {
         "function": set_property_value,
         "parameters": ["property", "value"],
     },
+    "call": {
+        "name": "Call function",
+        "description": "Call a function of the current node",
+        "function": call_node_method,
+        "parameters": ["function_name", "..."],
+    },
 }
 
 func execute_command(command: String) -> void:
@@ -64,7 +70,10 @@ func execute_command(command: String) -> void:
     if cmd_params.size() != cmd_dict['parameters'].size():
         command_execution_finished.emit("Invalid parameters", "text")
         return
+    print(cmd_function)
+    print(cmd_params)
     cmd_function.callv(cmd_params)
+
 
 func autocomplete(input: String, autocomplete_index: int = 0) -> String:
     var parsed_cmd = _parse_command(input)
@@ -88,7 +97,18 @@ func autocomplete(input: String, autocomplete_index: int = 0) -> String:
             var index = autocomplete_index % possible_properties.size()
             return "get " + possible_properties[index]
         "set":
-            return input
+            if parsed_cmd.size() > 2:
+                return input
+            if parsed_cmd.size() == 1 and input[-1] != " ":
+                return input
+            var prop_start = parsed_cmd[1] if parsed_cmd.size() == 2 else ""
+            # get a property that start with prop_start at the autocomplete_index modulo the number of possible properties
+            var possible_properties = []
+            for property_name in current_node_properties.keys():
+                if property_name.begins_with(prop_start):
+                    possible_properties.append(property_name)
+            var index = autocomplete_index % possible_properties.size()
+            return "set " + possible_properties[index]
         _:
             return input
 
@@ -104,7 +124,6 @@ func _cache_current_node_properties() -> void:
             'type': property.type,
             'class_name': property.class_name
         }
-    print(current_node_properties)
 
 func _cache_current_node_functions() -> void:
     current_node_functions.clear()
@@ -167,5 +186,24 @@ func set_property_value(property: String, str_value: String) -> void:
         return
     current_node.set(property, value)
     command_execution_finished.emit("Property set", "mute")
-    
+
+func call_node_method(function_name: String, ...args: Array) -> void:
+    if not current_node_functions.has(function_name):
+        command_execution_finished.emit("Function not available on current node", "text")
+        return
+    # evaluate every args
+    for i in range(args.size()):
+        var expression = Expression.new()
+        var error = expression.parse(args[i])
+        if error:
+            command_execution_finished.emit("Unable to parse value", "text")
+            return
+        var value = expression.execute()
+        if expression.has_execute_failed():
+            command_execution_finished.emit("Unable to parse value", "text")
+            return
+        args[i] = value
+    var result = current_node.callv(function_name, args)
+    command_execution_finished.emit(result, "text")
+
 #endregion
