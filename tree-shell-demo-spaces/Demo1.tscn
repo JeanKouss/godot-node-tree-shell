@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://buyqnfsi6d114"]
 
-[node name="Demo1" type="Node2D"]
+[node name="Demo1" type="Node2D" unique_id=162431860]
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=572673379]
 
-[node name="LabelsContainer" type="HBoxContainer" parent="UI"]
+[node name="LabelsContainer" type="HBoxContainer" parent="UI" unique_id=871282003]
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 28.0
@@ -15,46 +15,46 @@ grow_horizontal = 2
 theme_override_constants/separation = 79
 alignment = 1
 
-[node name="Label1" type="Label" parent="UI/LabelsContainer"]
+[node name="Label1" type="Label" parent="UI/LabelsContainer" unique_id=1590558133]
 layout_mode = 2
 text = "Label 1 text"
 
-[node name="Label2" type="Label" parent="UI/LabelsContainer"]
+[node name="Label2" type="Label" parent="UI/LabelsContainer" unique_id=1412308320]
 layout_mode = 2
 text = "Label 2 text"
 
-[node name="Label3" type="Label" parent="UI/LabelsContainer"]
+[node name="Label3" type="Label" parent="UI/LabelsContainer" unique_id=1279681824]
 layout_mode = 2
 text = "Label 3 text"
 
-[node name="Label4" type="Label" parent="UI/LabelsContainer"]
+[node name="Label4" type="Label" parent="UI/LabelsContainer" unique_id=1315272466]
 layout_mode = 2
 text = "Label 4 text"
 
-[node name="Label5" type="Label" parent="UI/LabelsContainer"]
+[node name="Label5" type="Label" parent="UI/LabelsContainer" unique_id=397236740]
 layout_mode = 2
 text = "Label 5 text"
 
-[node name="Pol1" type="Polygon2D" parent="."]
+[node name="Pol1" type="Polygon2D" parent="." unique_id=1905950423]
 position = Vector2(187, 227)
 polygon = PackedVector2Array(-33, -34, 11, -38, 38, -17, 26, 22, 32, 50, 9, 55, -2, 32, -20, 28, -35, 59, -71, 44)
 
-[node name="Pol2" type="Polygon2D" parent="."]
+[node name="Pol2" type="Polygon2D" parent="." unique_id=1730356305]
 position = Vector2(527, 235)
 polygon = PackedVector2Array(-128, -47, 11, -38, 38, -17, 26, 22, 32, 50, 9, 55, 8, 82, -20, 28, -35, 59, -71, 44)
 
-[node name="Pol3" type="Polygon2D" parent="."]
+[node name="Pol3" type="Polygon2D" parent="." unique_id=791784278]
 position = Vector2(905, 243)
 polygon = PackedVector2Array(-137, -32, 11, -38, 38, -17, 26, 22, 32, 50, 9, 55, -2, 32, -20, 28, -35, 59, -120, 54)
 
-[node name="Pol4" type="Polygon2D" parent="."]
+[node name="Pol4" type="Polygon2D" parent="." unique_id=2035121868]
 position = Vector2(182, 461)
 polygon = PackedVector2Array(-75, -25, 6, -36, 38, -17, 46, 15, 32, 50, 19, 67, -8, 72, -31, 77, -68, 65, -90, 33)
 
-[node name="Pol5" type="Polygon2D" parent="."]
+[node name="Pol5" type="Polygon2D" parent="." unique_id=218760761]
 position = Vector2(496, 454)
 polygon = PackedVector2Array(-79, -53, 11, -38, 38, -17, 111, 18, 32, 50, 10, 95, -2, 32, -20, 28, -63, 100, -97, 64)
 
-[node name="Pol6" type="Polygon2D" parent="."]
+[node name="Pol6" type="Polygon2D" parent="." unique_id=1337996497]
 position = Vector2(911, 457)
 polygon = PackedVector2Array(-126, -32, 11, -38, 38, -17, 26, 22, 32, 50, 9, 55, 5, 104, -17, 74, -35, 59, -71, 44)

@@ -23,6 +23,12 @@ var current_node_properties: Dictionary = {}
 var current_node_functions: Dictionary = {}
 
 var command_registry: Dictionary = {
+    "help": {
+        "name": "Help",
+        "description": "List all available commands",
+        "function": show_help,
+        "parameters": [],
+    },
     "lc": {
         "name": "List children",
         "description": "List the children of the current node",
@@ -53,6 +59,12 @@ var command_registry: Dictionary = {
         "function": call_node_method,
         "parameters": ["function_name", "..."],
     },
+    "tree": {
+        "name": "Tree",
+        "description": "Show the tree from the current node",
+        "function": tree_command,
+        "parameters": ["depth?"],
+    },
 }
 
 func execute_command(command: String) -> void:
@@ -67,7 +79,7 @@ func execute_command(command: String) -> void:
         return
     var cmd_function: Callable = cmd_dict['function']
     var cmd_params: Array = parsed_command.slice(1)
-    if cmd_params.size() != cmd_dict['parameters'].size():
+    if not _has_valid_parameter_count(cmd_dict, cmd_params):
         command_execution_finished.emit("Invalid parameters", "text")
         return
     print(cmd_function)
@@ -141,16 +153,54 @@ func _parse_command(command: String):
         result.append(m.get_string())
     return result
 
+func _has_valid_parameter_count(cmd_dict: Dictionary, cmd_params: Array) -> bool:
+    var expected_params: Array = cmd_dict.get("parameters", [])
+    if expected_params.is_empty():
+        return cmd_params.is_empty()
+    var has_variadic_parameter = expected_params[-1] == "..."
+    if has_variadic_parameter:
+        return cmd_params.size() >= expected_params.size() - 1
+    var required_count := 0
+    for parameter in expected_params:
+        if not str(parameter).ends_with("?"):
+            required_count += 1
+    return cmd_params.size() >= required_count and cmd_params.size() <= expected_params.size()
+
+func _format_parameter_list(parameters: Array) -> String:
+    if parameters.is_empty():
+        return "[]"
+    var parameter_names := PackedStringArray()
+    for parameter in parameters:
+        parameter_names.append(str(parameter))
+    return "[%s]" % ", ".join(parameter_names)
+
 #endregion
 
 
 #region Commands
 
+func show_help() -> void:
+    var command_names: Array = command_registry.keys()
+    command_names.sort()
+
+    var help_lines := []
+    for command_name in command_names:
+        var command_info: Dictionary = command_registry[command_name]
+        help_lines.append(
+            "%s: %s | params: %s" % [
+                command_name,
+                command_info.get("description", ""),
+                _format_parameter_list(command_info.get("parameters", []))
+            ]
+        )
+
+    command_execution_finished.emit(help_lines, "list")
+
 func list_children() -> void:
-    var children_names = []
+    var children_nodes = []
     for child in current_node.get_children():
-        children_names.append(child.name)
-    command_execution_finished.emit(children_names, "list")
+        children_nodes.append(child)
+    command_execution_finished.emit(children_nodes, "node_list")
 
 func change_node(path: String) -> void:
     var new_node = current_node.get_node_or_null(path)
@@ -205,5 +255,33 @@ func call_node_method(function_name: String, ...args: Array) -> void:
         args[i] = value
     var result = current_node.callv(function_name, args)
     command_execution_finished.emit(result, "text")
+
+func tree_command(depth: String = "1") -> void:
+    if not depth.is_valid_int():
+        command_execution_finished.emit("Depth must be an integer", "text")
+        return
+
+    var depth_int := depth.to_int()
+    if depth_int <= 0:
+        command_execution_finished.emit("Depth must be at least 1", "text")
+        return
+
+    var tree_data = _build_tree_data(current_node, depth_int)
+    command_execution_finished.emit(tree_data, "tree")
+
+func _build_tree_data(node: Node, remaining_depth: int) -> Dictionary:
+    var data := {
+        "name": node.name,
+        "node": node,
+        "children": []
+    }
+
+    if remaining_depth <= 0:
+        return data
+
+    for child in node.get_children():
+        data["children"].append(_build_tree_data(child, remaining_depth - 1))
+
+    return data
 
 #endregion
