@@ -7,6 +7,10 @@ signal current_node_changed(new_node: Node)
 ## show_as can be "text", "list", "tree", "mute"
 signal command_execution_finished(result: Variant, show_as: String)
 
+enum AUTOCOMPLETE_TYPE {
+    CURRENT_NODE_PROPERTY,
+    CURRENT_NODE_FUNCTION,
+}
 
 @onready var current_node: Node = _get_default_current_node():
     set(val):
@@ -36,28 +40,37 @@ var command_registry: Dictionary = {
         "parameters": [],
     },
     "cn": {
-        "name": "Change node",
-        "description": "Change the current node",
+        "name": "Change node/Current node",
+        "description": "Change the current node/Show current node if no path is provided",
         "function": change_node,
-        "parameters": ["path"],
+        "parameters": ["path?"],
     },
     "get": {
         "name": "Get property value",
         "description": "Get the value of a property of the current node",
         "function": get_property_value,
         "parameters": ["property"],
+        "autocomplete": {
+            "property": AUTOCOMPLETE_TYPE.CURRENT_NODE_PROPERTY
+        }
     },
     "set": {
         "name": "Set property",
         "description": "Set a property of the current node",
         "function": set_property_value,
         "parameters": ["property", "value"],
+        "autocomplete": {
+            "property": AUTOCOMPLETE_TYPE.CURRENT_NODE_PROPERTY
+        }
     },
     "call": {
         "name": "Call function",
         "description": "Call a function of the current node",
         "function": call_node_method,
         "parameters": ["function_name", "..."],
+        "autocomplete": {
+            "function_name": AUTOCOMPLETE_TYPE.CURRENT_NODE_FUNCTION
+        }
     },
     "tree": {
         "name": "Tree",
@@ -87,42 +100,56 @@ func execute_command(command: String) -> void:
     cmd_function.callv(cmd_params)
 
 
-func autocomplete(input: String, autocomplete_index: int = 0) -> String:
+func get_autocomplete_candidates(input: String) -> Dictionary:
+    var empty := {"candidates": [], "base_text": ""}
+    if input.is_empty():
+        return empty
     var parsed_cmd = _parse_command(input)
-    if parsed_cmd.size() == 0:
-        return input
-    var cmd_name = parsed_cmd[0]
-    match cmd_name:
-        "cn":
-            return input
-        "get":
-            if parsed_cmd.size() > 2:
-                return input
-            if parsed_cmd.size() == 1 and input[-1] != " ":
-                return input
-            var prop_start = parsed_cmd[1] if parsed_cmd.size() == 2 else ""
-            # get a property that start with prop_start at the autocomplete_index modulo the number of possible properties
-            var possible_properties = []
-            for property_name in current_node_properties.keys():
-                if property_name.begins_with(prop_start):
-                    possible_properties.append(property_name)
-            var index = autocomplete_index % possible_properties.size()
-            return "get " + possible_properties[index]
-        "set":
-            if parsed_cmd.size() > 2:
-                return input
-            if parsed_cmd.size() == 1 and input[-1] != " ":
-                return input
-            var prop_start = parsed_cmd[1] if parsed_cmd.size() == 2 else ""
-            # get a property that start with prop_start at the autocomplete_index modulo the number of possible properties
-            var possible_properties = []
-            for property_name in current_node_properties.keys():
-                if property_name.begins_with(prop_start):
-                    possible_properties.append(property_name)
-            var index = autocomplete_index % possible_properties.size()
-            return "set " + possible_properties[index]
+    if parsed_cmd.is_empty():
+        return empty
+    var cmd_name: String = parsed_cmd[0]
+    if not command_registry.has(cmd_name):
+        return empty
+    var cmd: Dictionary = command_registry[cmd_name]
+    if not cmd.has("autocomplete"):
+        return empty
+    var has_trailing_space: bool = input[-1] == " "
+    var args: Array = parsed_cmd.slice(1)
+    var param_idx: int
+    var partial: String
+    var base_text: String
+    if has_trailing_space:
+        param_idx = args.size()
+        partial = ""
+        base_text = input
+    else:
+        if args.is_empty(): # The user is typing the command name
+            return empty
+        # The user is currently typing the parameter
+        param_idx = args.size() - 1
+        partial = args[param_idx]
+        base_text = input.substr(0, input.length() - partial.length())
+    var params: Array = cmd["parameters"]
+    if param_idx >= params.size():
+        return empty
+    var param_name: String = str(params[param_idx]).trim_suffix("?")
+    if not cmd["autocomplete"].has(param_name):
+        return empty
+    var autocomplete_type: int = cmd["autocomplete"][param_name]
+    var source_keys: Array
+    match autocomplete_type:
+        AUTOCOMPLETE_TYPE.CURRENT_NODE_PROPERTY:
+            source_keys = current_node_properties.keys()
+        AUTOCOMPLETE_TYPE.CURRENT_NODE_FUNCTION:
+            source_keys = current_node_functions.keys()
         _:
-            return input
+            return empty
+    var candidates: Array = []
+    for key in source_keys:
+        if str(key).begins_with(partial):
+            candidates.append(str(key))
+    candidates.sort()
+    return {"candidates": candidates, "base_text": base_text}
 
 #region Helpers
 
@@ -202,7 +229,11 @@ func list_children() -> void:
         children_nodes.append(child)
     command_execution_finished.emit(children_nodes, "node_list")
 
-func change_node(path: String) -> void:
+func change_node(path: String = "") -> void:
+    if path.is_empty():
+        command_execution_finished.emit(str(current_node.get_path()), "text")
+        return
+
     var new_node = current_node.get_node_or_null(path)
     if new_node:
         current_node = new_node

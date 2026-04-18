@@ -41,7 +41,7 @@ func _on_command_execution_finished(result: Variant, show_as: String) -> void:
             shell_history.add_child(list_container)
             shell_history.move_child(list_container, -3)
         "node_list":
-            var node_list_container = VBoxContainer.new()
+            var node_list_container = HFlowContainer.new()
             for item in result:
                 var node_tag = NODE_TAG_SCENE.instantiate()
                 if item is Node:
