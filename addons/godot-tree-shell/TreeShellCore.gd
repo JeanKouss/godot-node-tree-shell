@@ -26,6 +26,8 @@ enum AUTOCOMPLETE_TYPE {
 var current_node_properties: Dictionary = {}
 var current_node_functions: Dictionary = {}
 
+var _command_history: Array = []
+
 var command_registry: Dictionary = {
     "help": {
         "name": "Help",
@@ -78,6 +80,12 @@ var command_registry: Dictionary = {
         "function": tree_command,
         "parameters": ["depth?"],
     },
+    "history": {
+        "name": "History",
+        "description": "Show command history",
+        "function": history_command,
+        "parameters": ["n?"],
+    },
 }
 
 func execute_command(command: String) -> void:
@@ -85,6 +93,7 @@ func execute_command(command: String) -> void:
         command_execution_finished.emit("Command is empty", "mute")
         return
     command_execution_requested.emit(command, current_node)
+    _command_history.append(command)
     var parsed_command = _parse_command(command)
     var cmd_dict: Dictionary = command_registry.get(parsed_command[0], {})
     if cmd_dict.is_empty():
@@ -99,6 +108,17 @@ func execute_command(command: String) -> void:
     print(cmd_params)
     cmd_function.callv(cmd_params)
 
+#region Helpers
+
+func get_command_history_size() -> int:
+    return _command_history.size()
+
+func get_command_history_index(index:int) -> String:
+    if index >= 0:
+        return ""
+    if abs(index) > _command_history.size():
+        return ""
+    return _command_history[index]
 
 func get_autocomplete_candidates(input: String) -> Dictionary:
     var empty := {"candidates": [], "base_text": ""}
@@ -151,7 +171,6 @@ func get_autocomplete_candidates(input: String) -> Dictionary:
     candidates.sort()
     return {"candidates": candidates, "base_text": base_text}
 
-#region Helpers
 
 func _get_default_current_node() -> Node:
     return get_tree().get_root()
@@ -263,7 +282,7 @@ func set_property_value(property: String, str_value: String) -> void:
         return
     var current_value = current_node.get(property)
     if typeof(value) != typeof(current_value):
-        command_execution_finished.emit("Value type does not match property type", "text")
+        command_execution_finished.emit("Value type does not match property type. Got %s, expected %s" % [type_string(typeof(value)), type_string(typeof(current_value))], "text")
         return
     current_node.set(property, value)
     command_execution_finished.emit("Property set", "mute")
@@ -299,6 +318,19 @@ func tree_command(depth: String = "1") -> void:
 
     var tree_data = _build_tree_data(current_node, depth_int)
     command_execution_finished.emit(tree_data, "tree")
+
+func history_command(n: String = "20") -> void:
+    if not n.is_valid_int():
+        command_execution_finished.emit("n must be an integer", "text")
+        return
+    var h = get_command_history(n.to_int(), true)
+    command_execution_finished.emit(h, "list")
+
+func get_command_history(n: int = 20, skip_last: bool = false) -> Array:
+    var end: int = _command_history.size() - (1 if skip_last else 0)
+    if n == -1:
+        return _command_history.slice(0, end)
+    return _command_history.slice(max(0, end - n), end)
 
 func _build_tree_data(node: Node, remaining_depth: int) -> Dictionary:
     var data := {

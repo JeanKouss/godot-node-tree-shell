@@ -87,6 +87,8 @@ func hide_candidates() -> void:
         child.queue_free()
     hide()
 
+func is_open() -> bool:
+    return visible
 
 func _get_caret_x() -> float:
     if not is_instance_valid(_line_edit):

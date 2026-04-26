@@ -3,6 +3,8 @@ extends HBoxContainer
 @onready var line_edit : CommandLineEdit = $CommandLineEdit
 @onready var _autocomplete_panel = $AutoCompletePanel
 
+var history_selection_index: int = 0
+
 func _ready() -> void:
     TreeShellCore.current_node_changed.connect(_on_current_node_changed)
     TreeShellCore.command_execution_finished.connect(_on_command_execution_finished)
@@ -39,6 +41,10 @@ func _handle_key(event: InputEventKey) -> void:
                 _autocomplete_panel.hide_candidates()
                 TreeShellCore.execute_command(command)  
                 get_viewport().set_input_as_handled()
+        KEY_ESCAPE:
+            if _autocomplete_panel.is_open() :
+                _autocomplete_panel.hide_candidates()
+                get_viewport().set_input_as_handled()
         KEY_BACKSPACE:
             line_edit.delete_before_caret()
             get_viewport().set_input_as_handled()
@@ -61,8 +67,14 @@ func _handle_key(event: InputEventKey) -> void:
         KEY_UP:
             if _autocomplete_panel.target_previous_candidate():
                 get_viewport().set_input_as_handled()
+            else :
+                _show_history_up()
+                get_viewport().set_input_as_handled()
         KEY_DOWN:
             if _autocomplete_panel.target_next_candidate():
+                get_viewport().set_input_as_handled()
+            else :
+                _show_history_down()
                 get_viewport().set_input_as_handled()
         _:
             if event.unicode > 0:
@@ -88,6 +100,25 @@ func _on_autocomplete_selected(base_text: String, candidate: String) -> void:
 func _update_current_node_path(node: Node) -> void:
     %CurrentNodePath.text = node.get_path()
 
+func _show_history_up() -> void:
+    history_selection_index -= 1
+    if abs(history_selection_index) > TreeShellCore.get_command_history_size():
+        history_selection_index += 1
+    var cmd = TreeShellCore.get_command_history_index(history_selection_index)
+    line_edit.command_text = cmd
+    line_edit.move_caret_end()
+    _autocomplete_panel.hide_candidates() # Avoid showing auto-comp after selection
+    line_edit.grab_focus()
+
+func _show_history_down() -> void:
+    history_selection_index += 1
+    if history_selection_index > 0:
+        history_selection_index = 0
+    var cmd = TreeShellCore.get_command_history_index(history_selection_index)
+    line_edit.command_text = cmd
+    line_edit.move_caret_end()
+    _autocomplete_panel.hide_candidates() # Avoid showing auto-comp after selection
+    line_edit.grab_focus()
 
 func clean_input_text(input: String) -> String:
     input = input.strip_edges()

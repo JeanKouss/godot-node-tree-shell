@@ -43,6 +43,12 @@ border_color = Color(1, 1, 1, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sqhux"]
 bg_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4jbps"]
+bg_color = Color(0, 0, 0, 0)
+border_width_bottom = 1
+border_color = Color(0.19607843, 0.83137256, 0.49019608, 1)
+expand_margin_bottom = 4.0
+
 [resource]
 default_font = ExtResource("1_8qdvy")
 default_font_size = 18
@@ -67,3 +73,5 @@ LineEdit/styles/focus = SubResource("StyleBoxEmpty_sqhux")
 LineEdit/styles/normal = SubResource("StyleBoxEmpty_gylso")
 LineEdit/styles/read_only = null
 Panel/styles/panel = SubResource("StyleBoxFlat_sqhux")
+ShellInputLabel/base_type = &"Label"
+ShellInputLabel/styles/focus = SubResource("StyleBoxFlat_4jbps")
