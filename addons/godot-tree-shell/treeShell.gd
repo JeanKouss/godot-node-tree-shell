@@ -2,7 +2,7 @@
 extends EditorPlugin
 
 
-const tree_shell_core_path = "res://addons/godot-tree-shell/TreeShellCore.gd"
+const tree_shell_core_path = "res://addons/godot-tree-shell/TreeShellCore.tscn"
 
 
 func _enable_plugin() -> void:

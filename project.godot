@@ -20,7 +20,11 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-TreeShellCore="*res://addons/godot-tree-shell/TreeShellCore.gd"
+TreeShellCore="*res://addons/godot-tree-shell/TreeShellCore.tscn"
+
+[display]
+
+window/subwindows/embed_subwindows=false
 
 [editor_plugins]
 
