@@ -3,10 +3,14 @@ extends Window
 const NODE_TAG_SCENE: PackedScene = preload("res://addons/godot-tree-shell/components/ui/NodeTag.tscn")
 
 @onready var shell_history = %ShellHistory
+@onready var embeded_subwindows_warn_node = $EmbededSubwindowsWarnPan
 
 func _ready() -> void:
     TreeShellCore.command_execution_requested.connect(_on_command_execution_requested)
     TreeShellCore.command_execution_finished.connect(_on_command_execution_finished)
+    var suppress: bool = ProjectSettings.get_setting("godot_tree_shell/suppress_embed_warning", false)
+    var emb_subwind : bool = ProjectSettings.get_setting("display/window/subwindows/embed_subwindows")
+    embeded_subwindows_warn_node.visible = emb_subwind and not suppress
 
 
 func _on_command_execution_requested(command: String, on: Node) -> void:
@@ -83,3 +87,16 @@ func _append_tree_node_tag(container: VBoxContainer, data: Dictionary, depth: in
     for child_data in data.get("children", []):
         if child_data is Dictionary:
             _append_tree_node_tag(container, child_data, depth + 1)
+
+
+func _on_keep_embeded_button_down() -> void:
+    ProjectSettings.set_setting("godot_tree_shell/suppress_embed_warning", true)
+    ProjectSettings.save()
+    embeded_subwindows_warn_node.visible = false
+
+
+func _on_desable_embeded_button_down() -> void:
+    ProjectSettings.set_setting("display/window/subwindows/embed_subwindows", false)
+    ProjectSettings.save()
+    embeded_subwindows_warn_node.visible = false
+    
