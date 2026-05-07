@@ -76,6 +76,9 @@ func _handle_key(event: InputEventKey) -> void:
             else :
                 _show_history_down()
                 get_viewport().set_input_as_handled()
+        KEY_F4:
+            TreeShellCore.terminal_visibility_toggle_requested.emit()
+            get_viewport().set_input_as_handled()
         _:
             if event.unicode > 0:
                 line_edit.insert_at_caret(char(event.unicode))

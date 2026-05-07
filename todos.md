@@ -1,4 +1,0 @@
-- Setting properties
-  - use store properties to auto complete property names
-- Calling methods
-- Calling signals

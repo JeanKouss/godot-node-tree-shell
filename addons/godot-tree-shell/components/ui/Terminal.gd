@@ -6,12 +6,13 @@ const NODE_TAG_SCENE: PackedScene = preload("res://addons/godot-tree-shell/compo
 @onready var embeded_subwindows_warn_node = $EmbededSubwindowsWarnPan
 
 func _ready() -> void:
+    hide()
+    TreeShellCore.terminal_visibility_toggle_requested.connect(_on_terminal_visibility_toggle_request)
     TreeShellCore.command_execution_requested.connect(_on_command_execution_requested)
     TreeShellCore.command_execution_finished.connect(_on_command_execution_finished)
     var suppress: bool = ProjectSettings.get_setting("godot_tree_shell/suppress_embed_warning", false)
     var emb_subwind : bool = ProjectSettings.get_setting("display/window/subwindows/embed_subwindows")
     embeded_subwindows_warn_node.visible = emb_subwind and not suppress
-
 
 func _on_command_execution_requested(command: String, on: Node) -> void:
     _append_command(command, on)
@@ -100,3 +101,5 @@ func _on_desable_embeded_button_down() -> void:
     ProjectSettings.save()
     embeded_subwindows_warn_node.visible = false
     
+func _on_terminal_visibility_toggle_request() -> void:
+    visible = not visible

@@ -4,6 +4,8 @@ signal command_execution_requested(command: String, on: Node)
 
 signal current_node_changed(new_node: Node)
 
+signal terminal_visibility_toggle_requested
+
 ## show_as can be "text", "list", "tree", "mute"
 signal command_execution_finished(result: Variant, show_as: String)
 
@@ -347,4 +349,13 @@ func _build_tree_data(node: Node, remaining_depth: int) -> Dictionary:
 
     return data
 
+#endregion
+
+
+#region Utilities
+func _unhandled_input(event: InputEvent) -> void:
+    if event is InputEventKey and event.pressed and not event.echo:
+        if event.keycode == KEY_F4:
+            terminal_visibility_toggle_requested.emit()
+            get_viewport().set_input_as_handled()
 #endregion
