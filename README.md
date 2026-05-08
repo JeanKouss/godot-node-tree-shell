@@ -1,4 +1,4 @@
-<h1 align="center">Godot Tree Shell</h1>
+<h1 align="center">Godot Node Tree Shell</h1>
 
 <p align="center">
   An in-game shell terminal for inspecting and manipulating the scene tree at runtime.<br/>
