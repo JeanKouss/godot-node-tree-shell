@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bp3hy2twvbd27"]
 
-[ext_resource type="Script" uid="uid://bktycngm8823r" path="res://addons/godot-tree-shell/components/ui/ShellInput.gd" id="1_4outo"]
-[ext_resource type="Script" uid="uid://btdjqkjpixnvy" path="res://addons/godot-tree-shell/components/ui/CommandLineEdit.gd" id="2_afdjy"]
-[ext_resource type="PackedScene" uid="uid://dco6dq1ksfjrv" path="res://addons/godot-tree-shell/components/ui/auto-complete/AutoCompletePanel.tscn" id="2_panel"]
+[ext_resource type="Script" uid="uid://bktycngm8823r" path="res://addons/godot-node-tree-shell/components/ui/ShellInput.gd" id="1_4outo"]
+[ext_resource type="Script" uid="uid://btdjqkjpixnvy" path="res://addons/godot-node-tree-shell/components/ui/CommandLineEdit.gd" id="2_afdjy"]
+[ext_resource type="PackedScene" uid="uid://dco6dq1ksfjrv" path="res://addons/godot-node-tree-shell/components/ui/auto-complete/AutoCompletePanel.tscn" id="2_panel"]
 
 [node name="CommandLineInput" type="HBoxContainer" unique_id=42545663]
 offset_right = 235.0

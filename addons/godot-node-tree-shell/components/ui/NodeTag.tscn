@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cf5m2dr1papi5"]
 
-[ext_resource type="Script" uid="uid://bjsa65m0fa7gf" path="res://addons/godot-tree-shell/components/ui/NodeTag.gd" id="1_mb8ov"]
+[ext_resource type="Script" uid="uid://bjsa65m0fa7gf" path="res://addons/godot-node-tree-shell/components/ui/NodeTag.gd" id="1_mb8ov"]
 
 [node name="NodeTag" type="Button" unique_id=517870489]
 custom_minimum_size = Vector2(100, 0)

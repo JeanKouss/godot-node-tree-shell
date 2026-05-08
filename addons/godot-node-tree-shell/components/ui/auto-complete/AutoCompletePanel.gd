@@ -2,7 +2,7 @@ extends Panel
 
 signal candidate_selected(base_text: String, candidate: String)
 
-const AutoCompleteButton = preload("res://addons/godot-tree-shell/components/ui/auto-complete/AutoCompleteButton.tscn")
+const AutoCompleteButton = preload("res://addons/godot-node-tree-shell/components/ui/auto-complete/AutoCompleteButton.tscn")
 
 @onready var _vbox: VBoxContainer = %VBoxContainer
 @onready var _scroll_container: ScrollContainer = $ScrollContainer

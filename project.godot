@@ -14,13 +14,13 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="godot-tree-shell"
+config/name="godot-node-tree-shell"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-TreeShellCore="*res://addons/godot-tree-shell/TreeShellCore.tscn"
+NodeTreeShellCore="*res://addons/godot-node-tree-shell/NodeTreeShellCore.tscn"
 
 [display]
 
@@ -28,7 +28,7 @@ window/subwindows/embed_subwindows=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-tree-shell/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot-node-tree-shell/plugin.cfg")
 
 [rendering]
 

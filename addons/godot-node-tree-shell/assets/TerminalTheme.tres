@@ -1,8 +1,8 @@
 [gd_resource type="Theme" format=3 uid="uid://b8lgso46bwmye"]
 
-[ext_resource type="FontFile" uid="uid://dct1xfaapeeig" path="res://addons/godot-tree-shell/assets/fonts/Sono_Proportional-Regular.ttf" id="1_8qdvy"]
-[ext_resource type="StyleBox" uid="uid://dors87yuka18" path="res://addons/godot-tree-shell/assets/theme-resources/auto-complete-button-targeted-style-box.tres" id="1_tal6c"]
-[ext_resource type="StyleBox" uid="uid://dt32rmpcybee2" path="res://addons/godot-tree-shell/assets/theme-resources/auto-complete-button-normal-style-box.tres" id="2_4jbps"]
+[ext_resource type="FontFile" uid="uid://dct1xfaapeeig" path="res://addons/godot-node-tree-shell/assets/fonts/Sono_Proportional-Regular.ttf" id="1_8qdvy"]
+[ext_resource type="StyleBox" uid="uid://dors87yuka18" path="res://addons/godot-node-tree-shell/assets/theme-resources/auto-complete-button-targeted-style-box.tres" id="1_tal6c"]
+[ext_resource type="StyleBox" uid="uid://dt32rmpcybee2" path="res://addons/godot-node-tree-shell/assets/theme-resources/auto-complete-button-normal-style-box.tres" id="2_4jbps"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tal6c"]
 content_margin_left = 10.0

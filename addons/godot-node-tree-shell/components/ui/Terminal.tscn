@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c8wvuh7gtv8gk"]
 
-[ext_resource type="Script" uid="uid://ey4hltpaj8e6" path="res://addons/godot-tree-shell/components/ui/Terminal.gd" id="1_felq1"]
-[ext_resource type="PackedScene" uid="uid://bp3hy2twvbd27" path="res://addons/godot-tree-shell/components/ui/ShellInput.tscn" id="1_jbsct"]
-[ext_resource type="Theme" uid="uid://b8lgso46bwmye" path="res://addons/godot-tree-shell/assets/TerminalTheme.tres" id="2_3o348"]
+[ext_resource type="Script" uid="uid://ey4hltpaj8e6" path="res://addons/godot-node-tree-shell/components/ui/Terminal.gd" id="1_felq1"]
+[ext_resource type="PackedScene" uid="uid://bp3hy2twvbd27" path="res://addons/godot-node-tree-shell/components/ui/ShellInput.tscn" id="1_jbsct"]
+[ext_resource type="Theme" uid="uid://b8lgso46bwmye" path="res://addons/godot-node-tree-shell/assets/TerminalTheme.tres" id="2_3o348"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3o348"]
 bg_color = Color(0, 0, 0, 0.7176471)
@@ -10,7 +10,7 @@ bg_color = Color(0, 0, 0, 0.7176471)
 [node name="Terminal" type="Window" unique_id=440503476]
 disable_3d = true
 oversampling_override = 1.0
-title = "GodotTreeShellTerminal"
+title = "GodotNodeTreeShellTerminal"
 initial_position = 5
 size = Vector2i(700, 600)
 transient = true

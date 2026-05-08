@@ -2,15 +2,15 @@
 extends EditorPlugin
 
 
-const tree_shell_core_path = "res://addons/godot-tree-shell/TreeShellCore.tscn"
+const node_tree_shell_core_path = "res://addons/godot-node-tree-shell/NodeTreeShellCore.tscn"
 
 
 func _enable_plugin() -> void:
-    add_autoload_singleton("TreeShellCore", tree_shell_core_path)
+    add_autoload_singleton("NodeTreeShellCore", node_tree_shell_core_path)
 
 
 func _disable_plugin() -> void:
-    remove_autoload_singleton("TreeShellCore")
+    remove_autoload_singleton("NodeTreeShellCore")
 
 
 func _enter_tree() -> void:

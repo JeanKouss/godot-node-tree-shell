@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://dct1xfaapeeig"
-path="res://.godot/imported/Sono_Proportional-Regular.ttf-04dac1660ae1e49a1f66d0f82fd2a5b3.fontdata"
+path="res://.godot/imported/Sono_Proportional-Regular.ttf-33fd539bbc0015c0ab6a992ba1057a47.fontdata"
 
 [deps]
 
-source_file="res://addons/godot-tree-shell/assets/fonts/Sono_Proportional-Regular.ttf"
-dest_files=["res://.godot/imported/Sono_Proportional-Regular.ttf-04dac1660ae1e49a1f66d0f82fd2a5b3.fontdata"]
+source_file="res://addons/godot-node-tree-shell/assets/fonts/Sono_Proportional-Regular.ttf"
+dest_files=["res://.godot/imported/Sono_Proportional-Regular.ttf-33fd539bbc0015c0ab6a992ba1057a47.fontdata"]
 
 [params]
 

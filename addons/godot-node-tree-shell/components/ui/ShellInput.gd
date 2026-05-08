@@ -6,9 +6,9 @@ extends HBoxContainer
 var history_selection_index: int = 0
 
 func _ready() -> void:
-    TreeShellCore.current_node_changed.connect(_on_current_node_changed)
-    TreeShellCore.command_execution_finished.connect(_on_command_execution_finished)
-    _update_current_node_path(TreeShellCore.current_node)
+    NodeTreeShellCore.current_node_changed.connect(_on_current_node_changed)
+    NodeTreeShellCore.command_execution_finished.connect(_on_command_execution_finished)
+    _update_current_node_path(NodeTreeShellCore.current_node)
     line_edit.text_changed.connect(_on_text_changed)
     _autocomplete_panel.candidate_selected.connect(_on_autocomplete_selected)
 
@@ -39,7 +39,7 @@ func _handle_key(event: InputEventKey) -> void:
                 line_edit.clear()
                 hide()
                 _autocomplete_panel.hide_candidates()
-                TreeShellCore.execute_command(command)  
+                NodeTreeShellCore.execute_command(command)  
                 get_viewport().set_input_as_handled()
         KEY_ESCAPE:
             if _autocomplete_panel.is_open() :
@@ -77,7 +77,7 @@ func _handle_key(event: InputEventKey) -> void:
                 _show_history_down()
                 get_viewport().set_input_as_handled()
         KEY_F4:
-            TreeShellCore.terminal_visibility_toggle_requested.emit()
+            NodeTreeShellCore.terminal_visibility_toggle_requested.emit()
             get_viewport().set_input_as_handled()
         _:
             if event.unicode > 0:
@@ -86,7 +86,7 @@ func _handle_key(event: InputEventKey) -> void:
 
 
 func _on_text_changed(new_text: String) -> void:
-    var result = TreeShellCore.get_autocomplete_candidates(new_text)
+    var result = NodeTreeShellCore.get_autocomplete_candidates(new_text)
     if result["candidates"].is_empty():
         _autocomplete_panel.hide_candidates()
         return
@@ -105,9 +105,9 @@ func _update_current_node_path(node: Node) -> void:
 
 func _show_history_up() -> void:
     history_selection_index -= 1
-    if abs(history_selection_index) > TreeShellCore.get_command_history_size():
+    if abs(history_selection_index) > NodeTreeShellCore.get_command_history_size():
         history_selection_index += 1
-    var cmd = TreeShellCore.get_command_history_index(history_selection_index)
+    var cmd = NodeTreeShellCore.get_command_history_index(history_selection_index)
     line_edit.command_text = cmd
     line_edit.move_caret_end()
     _autocomplete_panel.hide_candidates() # Avoid showing auto-comp after selection
@@ -117,7 +117,7 @@ func _show_history_down() -> void:
     history_selection_index += 1
     if history_selection_index > 0:
         history_selection_index = 0
-    var cmd = TreeShellCore.get_command_history_index(history_selection_index)
+    var cmd = NodeTreeShellCore.get_command_history_index(history_selection_index)
     line_edit.command_text = cmd
     line_edit.move_caret_end()
     _autocomplete_panel.hide_candidates() # Avoid showing auto-comp after selection

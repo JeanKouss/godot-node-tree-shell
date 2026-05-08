@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dco6dq1ksfjrv"]
 
-[ext_resource type="Script" uid="uid://8uhs0jdhxi1f" path="res://addons/godot-tree-shell/components/ui/auto-complete/AutoCompletePanel.gd" id="1_bng1p"]
+[ext_resource type="Script" uid="uid://8uhs0jdhxi1f" path="res://addons/godot-node-tree-shell/components/ui/auto-complete/AutoCompletePanel.gd" id="1_bng1p"]
 
 [node name="AutoCompletePanel" type="Panel" unique_id=1143128217]
 top_level = true

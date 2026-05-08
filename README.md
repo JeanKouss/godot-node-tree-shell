@@ -34,20 +34,20 @@
 ### Asset Library _(Recommended)_
 
 1. In Godot, open the **AssetLib** tab.
-2. Search for **"Godot Tree Shell"** and install it.
+2. Search for **"Godot Node Tree Shell"** and install it.
 3. Enable the plugin under **Project → Project Settings → Plugins**.
 
 
 ### Manual
 
 1. Download or clone this repository.
-2. Copy the `addons/godot-tree-shell` folder into your project's `addons/` directory.
+2. Copy the `addons/godot-node-tree-shell` folder into your project's `addons/` directory.
 3. Enable the plugin under **Project → Project Settings → Plugins**.
 
 > [!NOTE]
-> Only the `addons/godot-tree-shell` folder is required. Any files or directories outside of `addons/` (e.g. demo scenes, assets) can be safely ignored.
+> Only the `addons/godot-node-tree-shell` folder is required. Any files or directories outside of `addons/` (e.g. demo scenes, assets) can be safely ignored.
 
-The `TreeShellCore` autoload singleton is registered automatically when the plugin is enabled.
+The `NodeTreeShellCore` autoload singleton is registered automatically when the plugin is enabled.
 
 > [!NOTE]
 > For more help, see [Godot's official documentation on installing plugins](https://docs.godotengine.org/en/stable/tutorials/plugins/editor/installing_plugins.html).

@@ -19,7 +19,7 @@ func _on_pressed() -> void:
     if not is_instance_valid(_related_node) or not _related_node.is_inside_tree():
         disabled = true
         return
-    TreeShellCore.change_node(_related_node.get_path())
+    NodeTreeShellCore.change_node(_related_node.get_path())
 
 func _set_related_node(value: Node) -> void:
     if _related_node == value:

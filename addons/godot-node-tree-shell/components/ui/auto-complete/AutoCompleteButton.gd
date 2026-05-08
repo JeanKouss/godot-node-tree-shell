@@ -1,8 +1,8 @@
 extends Button
 
 var _is_targeted: bool = false
-var targeted_style_box: StyleBox = preload("res://addons/godot-tree-shell/assets/theme-resources/auto-complete-button-targeted-style-box.tres")
-var normal_style_box: StyleBox = preload("res://addons/godot-tree-shell/assets/theme-resources/auto-complete-button-normal-style-box.tres")
+var targeted_style_box: StyleBox = preload("res://addons/godot-node-tree-shell/assets/theme-resources/auto-complete-button-targeted-style-box.tres")
+var normal_style_box: StyleBox = preload("res://addons/godot-node-tree-shell/assets/theme-resources/auto-complete-button-normal-style-box.tres")
 
 signal selected(base_text: String, candidate: String)
 
