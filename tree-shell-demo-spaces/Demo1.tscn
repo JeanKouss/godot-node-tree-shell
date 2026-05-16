@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://buyqnfsi6d114"]
 
+[ext_resource type="Script" uid="uid://ewt2dhgkre14" path="res://tree-shell-demo-spaces/Demo1.gd" id="1_2ju12"]
+
 [node name="Demo1" type="Node2D" unique_id=162431860]
+script = ExtResource("1_2ju12")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=572673379]
 

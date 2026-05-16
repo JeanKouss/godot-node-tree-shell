@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c8wvuh7gtv8gk" path="res://addons/godot-node-tree-shell/components/ui/Terminal.tscn" id="2_ulb1s"]
 
 [node name="NodeTreeShellCore" type="Node" unique_id=725918633]
+process_mode = 3
 script = ExtResource("1_gmkul")
 
 [node name="Terminal" parent="." unique_id=1450950083 instance=ExtResource("2_ulb1s")]

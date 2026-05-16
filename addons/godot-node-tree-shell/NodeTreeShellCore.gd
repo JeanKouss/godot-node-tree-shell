@@ -12,6 +12,7 @@ signal command_execution_finished(result: Variant, show_as: String)
 enum AUTOCOMPLETE_TYPE {
     CURRENT_NODE_PROPERTY,
     CURRENT_NODE_FUNCTION,
+    CURRENT_NODE_SIGNAL,
 }
 
 @onready var current_node: Node = _get_default_current_node():
@@ -20,6 +21,7 @@ enum AUTOCOMPLETE_TYPE {
         emit_signal("current_node_changed", val)
         _cache_current_node_properties()
         _cache_current_node_functions()
+        _cache_current_node_signals()
     get():
         if not current_node:
             return _get_default_current_node()
@@ -27,6 +29,7 @@ enum AUTOCOMPLETE_TYPE {
 
 var current_node_properties: Dictionary = {}
 var current_node_functions: Dictionary = {}
+var current_node_signals: Dictionary = {}
 
 var _command_history: Array = []
 
@@ -74,6 +77,15 @@ var command_registry: Dictionary = {
         "parameters": ["function_name", "..."],
         "autocomplete": {
             "function_name": AUTOCOMPLETE_TYPE.CURRENT_NODE_FUNCTION
+        }
+    },
+    "emit": {
+        "name": "Emit signal",
+        "description": "Emit a signal of the current node",
+        "function": trigger_signal,
+        "parameters": ["signal_name", "..."],
+        "autocomplete": {
+            "signal_name": AUTOCOMPLETE_TYPE.CURRENT_NODE_SIGNAL
         }
     },
     "tree": {
@@ -164,6 +176,8 @@ func get_autocomplete_candidates(input: String) -> Dictionary:
             source_keys = current_node_properties.keys()
         AUTOCOMPLETE_TYPE.CURRENT_NODE_FUNCTION:
             source_keys = current_node_functions.keys()
+        AUTOCOMPLETE_TYPE.CURRENT_NODE_SIGNAL:
+            source_keys = current_node_signals.keys()
         _:
             return empty
     var candidates: Array = []
@@ -190,6 +204,13 @@ func _cache_current_node_functions() -> void:
     for function in current_node.get_method_list():
         current_node_functions[function.name] = {
             'args': function.args,
+        }
+
+func _cache_current_node_signals() -> void:
+    current_node_signals.clear()
+    for sig in current_node.get_signal_list():
+        current_node_signals[sig.name] = {
+            'args': sig.args,
         }
 
 func _parse_command(command: String):
@@ -307,6 +328,24 @@ func call_node_method(function_name: String, ...args: Array) -> void:
         args[i] = value
     var result = current_node.callv(function_name, args)
     command_execution_finished.emit(result, "text")
+
+func trigger_signal(signal_name: String, ...args: Array) -> void:
+    if not current_node_signals.has(signal_name):
+        command_execution_finished.emit("Signal not available on current node", "text")
+        return
+    for i in range(args.size()):
+        var expression = Expression.new()
+        var error = expression.parse(args[i])
+        if error:
+            command_execution_finished.emit("Unable to parse value", "text")
+            return
+        var value = expression.execute()
+        if expression.has_execute_failed():
+            command_execution_finished.emit("Unable to parse value", "text")
+            return
+        args[i] = value
+    current_node.callv("emit_signal", [signal_name] + args)
+    command_execution_finished.emit("Signal emitted", "mute")
 
 func tree_command(depth: String = "1") -> void:
     if not depth.is_valid_int():
