@@ -24,9 +24,9 @@ func clear() -> void:
     command_text = ""
     _caret_column = 0
 
-func insert_at_caret(character: String) -> void:
-    command_text = command_text.left(_caret_column) + character + command_text.substr(_caret_column)
-    _caret_column += 1
+func insert_at_caret(characters: String) -> void:
+    command_text = command_text.left(_caret_column) + characters + command_text.substr(_caret_column)
+    _caret_column += characters.length()
     grab_focus()
 
 func delete_before_caret() -> void:
